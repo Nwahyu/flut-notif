@@ -4,6 +4,8 @@ class NotificationHandlerService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  // simpel, bigPicture
+  final String tipeNotifikasi = 'simpel';
 
   void initialize() {
     final InitializationSettings initializationSettings =
@@ -15,8 +17,10 @@ class NotificationHandlerService {
 
   // Future<void> show
 
-  Future<void> showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  Future<void> showNotification({
+    tipeNotifikasi,
+  }) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
           'your_channel_id',
           'your_channel_name',
@@ -24,8 +28,15 @@ class NotificationHandlerService {
           importance: Importance.max,
           priority: Priority.high,
           ticker: 'ticker',
+          styleInformation: tipeNotifikasi == 'bigPicture'
+          ? BigPictureStyleInformation(
+            DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+            contentTitle: 'Notifikasi gambar',
+            summaryText: 'Ini notifikasi gambar dengan ringkasan.',
+          )
+          : null,
         );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
     );
     await _flutterLocalNotificationsPlugin.show(
@@ -35,4 +46,6 @@ class NotificationHandlerService {
       platformChannelSpecifics,
     );
   }
+
+
 }

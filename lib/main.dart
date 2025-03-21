@@ -22,7 +22,7 @@ class _NotificationDemoState extends State<NotificationDemo> {
       NotificationHandlerService();
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _notificationHandlerService.initialize();
   }
@@ -31,12 +31,25 @@ class _NotificationDemoState extends State<NotificationDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Demo Notifikasi')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => _notificationHandlerService.showNotification(),
-          child: Text('Tampilkan Notifikasi'),
-        ),
+      body:
+      Center(
+        child:
+      Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => _notificationHandlerService.showNotification(),
+            child: Text('Tampilkan Notifikasi'),
+          ),
+          ElevatedButton(
+            onPressed:
+                () => _notificationHandlerService.showNotification(
+                  tipeNotifikasi: 'bigPicture',
+                ),
+            child: Text('Tampilkan Notifikasi big picture'),
+          ),
+        ],
       ),
+    ),
     );
   }
 }
