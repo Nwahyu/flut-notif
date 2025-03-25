@@ -4,22 +4,27 @@ class NotificationHandlerService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  // simpel, bigPicture
+  // tipe: simpel, bigPicture
   final String tipeNotifikasi = 'simpel';
 
-  void initialize() {
+  void initialize() async {
     final InitializationSettings initializationSettings =
         InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-    );
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        );
+    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    //   'your_channel_id',
+    //   'your_channel_name',
+    // );
+    // _flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //         AndroidFlutterLocalNotificationsPlugin>()
+    //     ?.createNotificationChannel(channel);
   }
 
-  // Future<void> show
-
-  Future<void> showNotification({
-    tipeNotifikasi,
-  }) async {
+  Future<void> showNotification({tipeNotifikasi}) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
           'your_channel_id',
@@ -28,13 +33,26 @@ class NotificationHandlerService {
           importance: Importance.max,
           priority: Priority.high,
           ticker: 'ticker',
-          styleInformation: tipeNotifikasi == 'bigPicture'
-          ? BigPictureStyleInformation(
-            DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
-            contentTitle: 'Notifikasi gambar',
-            summaryText: 'Ini notifikasi gambar dengan ringkasan.',
-          )
-          : null,
+          sound:
+              tipeNotifikasi == 'bigPicture'
+                  ? RawResourceAndroidNotificationSound('software_close')
+                  : null,
+          styleInformation:
+              tipeNotifikasi == 'bigPicture'
+                  ? BigPictureStyleInformation(
+                    DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+                    contentTitle: 'Notifikasi gambar',
+                    summaryText: 'Ini notifikasi gambar dengan ringkasan.',
+                  )
+                  : null,
+          actions: <AndroidNotificationAction>[
+            AndroidNotificationAction(
+              '_action_1',
+              'ini title',
+              icon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+              contextual: true,
+            ),
+          ],
         );
     NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -46,6 +64,4 @@ class NotificationHandlerService {
       platformChannelSpecifics,
     );
   }
-
-
 }
